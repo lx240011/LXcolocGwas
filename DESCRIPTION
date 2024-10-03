@@ -1,7 +1,7 @@
 Package: LXcolocGwas
 Type: Package
 Title:  LXcolocGwas
-Version: 1.0
+Version: 1.01
 Author: Dr.lin
 Maintainer: Dr.lin <gluck4668@sina.com>
 Description:  LXcolocGwas can be used to analyze the colocalization between eQTLs and GWAS.

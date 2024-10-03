@@ -19,12 +19,6 @@ coloc_gwas <- function(eqtlID=eqtlID,
                        se_gwas=se_gwas,
                        eaf_gwas=eaf_gwas,
                        samplesize_gwas= samplesize_gwas,
-                       target_gene=target_gene,
-                       geneChr=geneChr,
-                       geneStart=geneStart,
-                       geneEnd=geneEnd,
-                       number=number,
-                       nontarget=nontarget,
                        SNP_PP_H4=SNP_PP_H4){
 
 
@@ -32,9 +26,7 @@ coloc_gwas <- function(eqtlID=eqtlID,
   inst_packages()
 
 #---create dir----------------
-  if(nontarget)
-    dir_file="analysis results (nontarget)" else
-      dir_file="analysis results (target)"
+    dir_file="coloc analysis results"
 
     if(!dir.exists(dir_file))
       dir.create(dir_file)
@@ -83,19 +75,15 @@ eqtl_df <- eqtl_df[!is.na(eqtl_df$beta.exposure),]%>% .[!duplicated(.$SNP),]
 # head(eqtl_df)
 
  #---共定位区域-------------
- if(nontarget){
     top_snp <- eqtl_df %>% dplyr::arrange(pval.exposure) %>% .[1,]
     chrpos <- paste0(top_snp$chr.exposure,":",top_snp$pos.exposure-100000,"-",top_snp$pos.exposure+100000)
     geneChr <- top_snp$chr.exposure
     geneStart <- top_snp$pos.exposure
     geneEnd <- top_snp$pos.exposure
-  } else {
-    chrpos <- paste0(geneChr, ":", geneStart - number, "-", geneEnd + number)}
 
 #---eqtl data 取共定位区域----
  eqtl_coloc <- eqtl_df %>%
-    subset(chr.exposure==geneChr & pos.exposure>geneStart-number & pos.exposure<geneEnd+number)
-
+    subset(chr.exposure==geneChr & pos.exposure>geneStart-100000 & pos.exposure<geneEnd+100000)
 
 #------gwas data----------------------------------
 gwas_df <- fread(outcomeID)
@@ -112,8 +100,7 @@ gwas_df <- gwas_df %>% dplyr::rename(chr.outcome=chr_gwas,
 head(gwas_df)
 
 #-----------添加结局样本数量----------------------------------------#
-
- id02 <- str_extract(outcomeID,"(?<=\\/)[^/]+$") %>% str_extract(".*?(?=\\.)")
+id02 <- str_extract(outcomeID,"(?<=\\/)[^/]+$") %>% str_extract(".*?(?=\\.)")
 
     if(grepl("_",id02))
       id_gwas <- str_extract(id02,".*?(?=_)") else
@@ -126,13 +113,9 @@ head(gwas_df)
 #------去掉beta NA和重复的SNP------------------------------------------------#
 gwas_df <- gwas_df[!is.na(gwas_df$beta.outcome),]%>% .[!duplicated(.$SNP),]
 
-
 #---outcome data 取共定位区域----
 gwas_coloc <- gwas_df %>%
-    subset(chr.outcome==geneChr & pos.outcome>geneStart-number & pos.outcome<geneEnd+number)
-
-#rm(gwas_df)
- #write.csv (gwas_coloc, paste0("analysis results/",str_extract(outcomeID,".*?(?=\\.)"),"_coloc_data.csv"),row.names=F )
+    subset(chr.outcome==geneChr & pos.outcome>geneStart-100000 & pos.outcome<geneEnd+100000)
 
 #---整合eqtl和gwas数据-------
 overlapping_snps <- intersect(eqtl_coloc$SNP,gwas_coloc$SNP)

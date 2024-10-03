@@ -56,20 +56,6 @@ se_gwas="standard_error"
 eaf_gwas="effect_allele_frequency"
 
 samplesize_gwas= "D:/Desktop/LXcolocGwas/coloc_data/outcome_gwas_id_info.xlsx"#"outcome_sample_info.xlsx_gwas_info.xlsx"
-# 如果数据来自GWAS Catalog，可以填NA；如果来自其他数据库，则需要提供含有ID和samplesize的excel表格
-
-#------target gene information------------------------------
-target_gene="THRB"  # 用靶基因的染色体范围来筛选暴露因素snp，然后分析eqtl和gwas共定位
-
-geneChr=3                # FASN 基因所在的染色体(https://www.ncbi.nlm.nih.gov/gene)
-geneStart=24158644       #染色体起始位置
-geneEnd=24537199         #染色体终止位置
-
-number=100000             # 取值前后范围
-
-
-#------non-target-----------------------------------------
-nontarget=T #无靶基因，以暴露data中pvalue最小的snp做为假定“target”来分析两个数据间的共定位
 
 
 #-----#共定位阈值-----------------------------------------
@@ -97,12 +83,6 @@ coloc_gwas (eqtlID=eqtlID,
             se_gwas=se_gwas,
             eaf_gwas=eaf_gwas,
             samplesize_gwas= samplesize_gwas,
-            target_gene=target_gene,
-            geneChr=geneChr,
-            geneStart=geneStart,
-            geneEnd=geneEnd,
-            number=number,
-            nontarget=nontarget,
             SNP_PP_H4=SNP_PP_H4 )
 
 
