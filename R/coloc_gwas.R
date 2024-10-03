@@ -9,7 +9,6 @@ coloc_gwas <- function(eqtlID=eqtlID,
                        se_eqtl=se_eqtl,
                        eaf_eqtl=eaf_eqtl,
                        samplesize_eqtl_file=samplesize_eqtl_file,
-
                        outcomeID =outcomeID,
                        type2 = type2,
                        chr_gwas=chr_gwas,
@@ -20,18 +19,13 @@ coloc_gwas <- function(eqtlID=eqtlID,
                        se_gwas=se_gwas,
                        eaf_gwas=eaf_gwas,
                        samplesize_gwas= samplesize_gwas,
-
                        target_gene=target_gene,
                        geneChr=geneChr,
                        geneStart=geneStart,
                        geneEnd=geneEnd,
                        number=number,
-
                        nontarget=nontarget,
-
-                       SNP_PP_H4=SNP_PP_H4
-
-                      ){
+                       SNP_PP_H4=SNP_PP_H4){
 
 
 #----R packages---------------
@@ -128,8 +122,6 @@ head(gwas_df)
     idx_gwas <- grep(id_gwas,sam_gwas[,1])
 
     gwas_df$samplesize.outcome <- sam_gwas$samplesize[idx_gwas] #添加例数
-
-
 
 #------去掉beta NA和重复的SNP------------------------------------------------#
 gwas_df <- gwas_df[!is.na(gwas_df$beta.outcome),]%>% .[!duplicated(.$SNP),]
@@ -248,7 +240,7 @@ dataset2 <- list(pvalues=merg_data$pval.outcome,
   assoc <- Reduce(function(x,y)inner_join(x,y,by="marker"),list(mark,set_01,set_02)) %>%
     data.frame() %>% dplyr::arrange(marker)
 
-  traits=c(dataset1$id[1],dataset2$id[1])
+  traits=c(dataset1$id[1], str_extract(dataset2$id[1],"(?<=/)[^/]+$"))
 
   if(is.na(lead_snp))
     highlights= col_data$snp[1] else
@@ -257,7 +249,7 @@ dataset2 <- list(pvalues=merg_data$pval.outcome,
   library(geni.plots)
   assoc$pos <-as.numeric(assoc$pos) %>% as.integer()
 
-  plot_geni <- fig_region_stack(data = assoc, corr = corr_list,
+  plot_geni <- geni.plots::fig_region_stack(data = assoc, corr = corr_list,
                                 traits = traits,highlights=highlights,
                                 build = 37,title_center = TRUE)
   plot_geni
@@ -271,5 +263,6 @@ dataset2 <- list(pvalues=merg_data$pval.outcome,
 
 }#---- foreach end---
 
+print( paste0("The colocalization analysis  result can be found in the folder of '",dir_file,"'."))
 
 }#----------the end---------------------------------------------

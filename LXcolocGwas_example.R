@@ -2,7 +2,7 @@
 install.packages("devtools")
 library(devtools)
 
-install_github("gluck4668/LXcolocGwas")
+install_github("lx240011/LXcolocGwas")
 
 library(LXcolocGwas)
 
@@ -87,7 +87,6 @@ coloc_gwas (eqtlID=eqtlID,
             se_eqtl=se_eqtl,
             eaf_eqtl=eaf_eqtl,
             samplesize_eqtl_file=samplesize_eqtl_file,
-
             outcomeID =outcomeID,
             type2 = type2,
             chr_gwas=chr_gwas,
@@ -98,15 +97,12 @@ coloc_gwas (eqtlID=eqtlID,
             se_gwas=se_gwas,
             eaf_gwas=eaf_gwas,
             samplesize_gwas= samplesize_gwas,
-
             target_gene=target_gene,
             geneChr=geneChr,
             geneStart=geneStart,
             geneEnd=geneEnd,
             number=number,
-
             nontarget=nontarget,
-
             SNP_PP_H4=SNP_PP_H4 )
 
 
